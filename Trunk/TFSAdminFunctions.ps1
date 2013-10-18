@@ -313,8 +313,9 @@ Function Get-TFSBuildsInProgress {
             $spec.QueryOptions = (($typ_QueryOptions::Definitions).value__ + ($typ_QueryOptions::Controllers).value__ + ($typ_QueryOptions::Agents).value__)
 
             ($BuildService.QueryBuilds($spec)).Builds | % {
-                $RunningBuild = "" | Select BuildDefinition, BuildAgent
+                $RunningBuild = "" | Select Project, BuildDefinition, BuildAgent
                 
+                $RunningBuild.Project = $_.TeamProject
                 $BuildDetail = $BuildService.GetBuild($_.Uri)
                 $RunningBuild.BuildDefinition = ($BuildService.GetBuildDefinition($BuildDetail.BuildDefinitionUri)).Name
                 $BuildAgents = $BuildDetail.BuildController.Agents
